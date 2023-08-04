@@ -2,11 +2,6 @@ import os
 import subprocess
 from pathlib import Path
 
-import asyncio
-from mitm.MitmHandler import start_proxy
-
-from setup.Config import config
-
 from util.Logger import logger
 
 def is_cert_installed():
