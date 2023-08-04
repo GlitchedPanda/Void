@@ -2,6 +2,11 @@ import os
 import subprocess
 from pathlib import Path
 
+import asyncio
+from mitm.MitmHandler import start_proxy
+
+from setup.Config import config
+
 from util.Logger import logger
 
 def is_cert_installed():
@@ -13,7 +18,6 @@ def is_cert_installed():
 
 def install_cert():
 	logger.warning('Installing mitmproxy certificate...')
-
 
 	crtPath = Path.home() / '.mitmproxy' / 'mitmproxy-ca-cert.cer'
 	logger.debug(f'certificate path: "{crtPath}"')

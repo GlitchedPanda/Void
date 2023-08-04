@@ -30,9 +30,7 @@ if __name__ == '__main__':
         asyncio.run(start_proxy('127.0.0.1', config.port))  
 
         if config.delete_cert_on_exit:
-            delete_cert()
-
-        asyncio.get_running_loop    
+            delete_cert()  
 
         logger.info('Succesfully exited')        
         disable_proxy()
