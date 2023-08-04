@@ -1,0 +1,4 @@
+colorama==0.4.6
+mitmproxy==9.0.1
+pefile==2023.2.7
+pymem==1.12.0
