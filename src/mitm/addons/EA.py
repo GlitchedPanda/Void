@@ -15,13 +15,14 @@ Client = namedtuple('Client', 'NAME PROCESS_NAME DLL_NAME FUNCTION_NAME')
 class EaAddon(BaseAddon):
     last_client_pid = 0
     entitlements_url = 'https://gist.githubusercontent.com/GlitchedPanda/4d7f1f4f8c1b46f065a4b7ace96fb16a/raw/dfbb4368449a67337a0832283c2a32ea6497bdba/entitlements.json'
+    api_host = 'service-aggregation-layer.juno.ea.com'
 
     def __init__(self):
-        self.patch_origin_client()
+        self.patch_ea_client()
 
     @staticmethod
-    def request(flow: HTTPFlow):
-        EaAddon.block_telemetry(flow)
+    def request(self, flow: HTTPFlow):
+        self.block_telemetry(flow)
 
     @staticmethod
     def response(self, flow: HTTPFlow):
@@ -34,17 +35,15 @@ class EaAddon(BaseAddon):
             logger.debug('Blocked telemetry request')   
 
     def intercept_products(self, flow: HTTPFlow):
-        if BaseAddon.host_and_path_match(
-            flow=flow,
-            host=self.api_host,
-            path=r'^/graphql?operationName=GetGameProductOfferIds'
-        ):
-            # Just for store page, no effect in game
+        logger.debug('intercept')
+        logger.debug(flow.request.pretty_host)
+        if flow.request.pretty_host == self.api_host and flow.request.path.startswith('/graphql?operationName=GetGameProductOfferIds'):
+            # no effect in game
             logger.info(flow)
 
     # Credit to anadius for the idea
     # Credit to Dream-APi for the code
-    def patch_origin_client(self):
+    def patch_ea_client(self):
         ea_desktop = Client('EA Desktop', 'EADesktop.exe', 'libcrypto-1_1-x64.dll', 'EVP_DigestVerifyFinal')
         client = ea_desktop
 
